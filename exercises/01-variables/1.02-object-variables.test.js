@@ -29,14 +29,14 @@ TASK #1
 	that are string values in the array that are names of fruits.
 */
 
-// your code goes here
+let fruits = ["apple", "Mango"];
 
 /* 
 TASK #2
 	Create an empty array variable named mixedData.
 */
 
-// your code goes here
+mixedData = [];
 
 /*
 TASK #3
@@ -53,7 +53,7 @@ TASK #3
 	3: Push a boolean value
 */
 
-// your code goes here
+mixedData.push(7, "lmao", false);
 
 /* ****************************************************************************
    ***           DO NOT MODIFY ANYTHING AFTER THIS SECTION                  ***

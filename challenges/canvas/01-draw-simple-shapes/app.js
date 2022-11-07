@@ -28,8 +28,7 @@ const context = canvas.getContext("2d");
 	to see it on the canvas.  The default fill style is black.
 */
 
-// Add some code here by typing context.fillRect and let intellisense help you
-// to complete the statement. 
+context.fillRect(0,0,50,100);
 
 /* 
 	This should draw a black rectangle on the canvas at the x and y coordinates
@@ -38,9 +37,8 @@ const context = canvas.getContext("2d");
 	of the context BEFORE you draw your rectangle, it will change it's color.
 */
 
-// Add some code here to set the fillStyle property of the context to red
-// HINT: this should look something like this: context.fillStyle = "red"; 
-
+context.fillStyle = "red";
+context.fillRect(0,0,90,125);
 // Add some code to draw another rectangle.  Make sure you change the x and y
 // coordinates, otherwise it will draw over your first rectangle!
 
