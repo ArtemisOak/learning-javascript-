@@ -7,7 +7,7 @@ canvas.height = 1000;
 let ctx = canvas.getContext("2d");
 
 class ClickBox {
-	constructor(x, y, size, colors) {
+	constructor(x, y, colors, size) {
 		this.x = x;
 		this.y = y;
 		this.size = size;
@@ -22,15 +22,29 @@ class ClickBox {
 		let colorIndex = Math.floor(Math.random() * this.colors.length);
 		this.color = colors[colorIndex];
 	}
-	update(elapsedTime) {
-		this.lastRefresh += elapsedTime;
-		if(this.lastRefresh < this.refreshRate) return;
-		if(this.lastRefresh >= this.refreshRate) {
-			this.setColor();
-		}
+
+	amIClicked(x,y) {
+		if(x < this.x) return false;
+		if(x > this.x + this.size) return false;
+		if(y < this.y) return false;
+		if(y > this.y + this.size) return false;
+		return true;
 	}
 
-	draw() {}
+	update(elapsedTime) {
+		if(this.isClicked) return;
+		this.lastRefresh += elapsedTime;
+		if(this.lastRefresh < this.refreshRate) return;
+		this.lastRefresh = 0;
+		this.setColor();
+	}
+
+	draw() {
+	// 	let square = new Path2D();
+	// square.rect(x, y, size, size);
+	ctx.fillStyle = this.color;
+	ctx.fillRect(this.x, this.y, this.size, this.size);
+	}
  }
 
 let squares = [];
@@ -41,34 +55,37 @@ let colors = ["red", "orange", "yellow", "green", "blue", "purple", "magenta", "
 //row += 1
 //row++
 
-function drawSquare(x, y, color, size = 150) {
-	let square = new Path2D();
-	square.rect(x, y, size, size);
-	squares.push(square);
-	ctx.fillStyle = color;
-	ctx.fillRect(x, y, size, size);
+for (let row = 0; row < gridSize; row = row + 1) {
+	for (let column = 0; column < gridSize; column = column + 1) {
+		let x = column * size;
+		let y = row * size;
+		let box = new ClickBox(x, y, colors, size);
+		squares.push(box);
+	}
 }
-console.log(squares);
+
+
+canvas.addEventListener("click", (e) => {
+	console.log(e.offsetX, e.offsetY);
+	squares.forEach((b) => {
+		if(b.amIClicked(e.offsetX, e.offsetY)) {
+			b.isClicked = true;
+		}
+	});
+});
 
 let currentTime = 0;
-const refreshRate = 500;
-let lastRefresh = 0;
 
 function drawLoop(timeStamp) {
 	let elapsedTime = timeStamp - currentTime;
 	currentTime = timeStamp;
-	lastRefresh = lastRefresh + elapsedTime;
-	if(lastRefresh >= refreshRate) {
-		lastRefresh = 0;
-		for (let row = 0; row < gridSize; row = row + 1) {
-			for (let column = 0; column < gridSize; column = column + 1) {
-				let colorIndex = Math.floor(Math.random() * colors.length);
-				let color = colors[colorIndex];
-				drawSquare(column * size, row * size, color, size);
-			}
-		}
-	}
+	squares.forEach((b) => {
+		b.update(elapsedTime);
+		b.draw();
+	})
 
 	requestAnimationFrame(drawLoop);
 }
+
+
 requestAnimationFrame(drawLoop);
